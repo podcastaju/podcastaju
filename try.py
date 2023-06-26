@@ -165,7 +165,6 @@ def handle_command(update, context):
 def main():
     updater = Updater(token=TELEGRAM_BOT_TOKEN, use_context=True)
     # Start the bot
-    updater.idle()
     dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler('upload', handle_command))
     dispatcher.add_handler(CommandHandler('search', handle_command))
