@@ -1,6 +1,7 @@
 import os
 import pickle
 import telegram
+import uvicorn
 from telegram.ext import Updater, CommandHandler
 import youtube_dl
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -174,3 +175,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    uvicorn.run(app, host="0.0.0.0", port=8181)
