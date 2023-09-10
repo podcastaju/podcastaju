@@ -11,6 +11,9 @@ from googleapiclient.errors import HttpError
 import json
 import urllib.parse
 import time
+from dotenv import load_dotenv
+from fastapi import FastAPI, Header, HTTPException, Depends
+from pydantic import BaseModel
 
 
 # Define the scopes required for YouTube Data API access
@@ -21,6 +24,14 @@ SCOPES = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googlea
 TELEGRAM_BOT_TOKEN = '6204189517:AAG_nD_RBu58OHZTZSPatXIHgIP6ueKmY1w'
 CLIENT_SECRETS_FILE = 'client_secrets.json'
 CREDENTIALS_PICKLE_FILE = 'credentials.pickle'
+
+# Define the Pydantic model for Telegram updates
+class TelegramUpdate(BaseModel):
+    update_id: int
+    message: dict
+
+# Create a FastAPI app
+app = FastAPI()
 
 def authenticate():
     creds = None
