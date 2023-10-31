@@ -52,6 +52,7 @@ def upload_video(chat_id, video_url=None):
         ydl_opts = {
             'outtmpl': '%(id)s.%(ext)s',  # Use video ID as the filename
             'writeinfojson': True,  # Save video metadata in a JSON file
+            'format': 'best'  # Download the best available video format
         }
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(video_url, download=False)
@@ -64,7 +65,8 @@ def upload_video(chat_id, video_url=None):
             with open(metadata_file, 'r') as f:
                 metadata = json.load(f)
             # Extract the video filename from the metadata
-            video_filename = metadata['_filename']
+            # video_filename = metadata['_filename']
+            video_filename = f"{video_id}.{metadata['ext']}"
 
             # Read the video metadata from the JSON file
             video_title = metadata['title']
