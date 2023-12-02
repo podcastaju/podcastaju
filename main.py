@@ -40,12 +40,13 @@ def authenticate(chat_id):
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES, open_browser=False)
             print(f"Please visit this URL to authorize this application: {flow.authorization_url()[0]}")
             linktologin = f"{flow.authorization_url()[0]}"
             bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
             bot.send_message(chat_id=chat_id, text=linktologin)
-            creds = flow.run_local_server(port=0)
+            #creds = flow.run_local_server(port=0)
+            creds = flow.run_console()
         
         # Save the credentials for the next run
         with open(CREDENTIALS_PICKLE_FILE, 'wb') as token:
