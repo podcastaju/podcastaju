@@ -22,7 +22,7 @@ TELEGRAM_BOT_TOKEN = '6204189517:AAG_nD_RBu58OHZTZSPatXIHgIP6ueKmY1w'
 CLIENT_SECRETS_FILE = 'client_secrets.json'
 CREDENTIALS_PICKLE_FILE = 'credentials.pickle'
 
-def authenticate():
+def authenticate(chat_id):
     creds = None
 
     # Check if credentials already exist
@@ -41,6 +41,10 @@ def authenticate():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
+            print(f"Please visit this URL to authorize this application: {flow.authorization_url()[0]}")
+            linktologin = f"{flow.authorization_url()[0]}"
+            bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+            bot.send_message(chat_id=chat_id, text=linktologin)
             creds = flow.run_local_server(port=0)
         
         # Save the credentials for the next run
@@ -51,7 +55,7 @@ def authenticate():
 
 def upload_video(chat_id, video_url=None):
     # Authenticate and get the credentials
-    credentials = authenticate()
+    credentials = authenticate(chat_id)
 
     if video_url:
         # Download the video using youtube-dl
@@ -103,7 +107,7 @@ def upload_video(chat_id, video_url=None):
     }
 
     # Authenticate and get the credentials
-    credentials = authenticate()
+    credentials = authenticate(chat_id)
 
     # Build the YouTube service
     youtube = build('youtube', 'v3', credentials=credentials)
@@ -134,7 +138,7 @@ def upload_video(chat_id, video_url=None):
 
 def search_videos(chat_id, query):
     # Authenticate and get the credentials
-    credentials = authenticate()
+    credentials = authenticate(chat_id)
 
     # Build the YouTube service
     youtube = build('youtube', 'v3', credentials=credentials)
