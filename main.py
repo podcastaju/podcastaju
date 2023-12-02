@@ -10,6 +10,7 @@ from googleapiclient.errors import HttpError
 import json
 import urllib.parse
 import time
+from datetime import datetime, timedelta
 
 
 # Define the scopes required for YouTube Data API access
@@ -28,6 +29,11 @@ def authenticate():
     if os.path.exists(CREDENTIALS_PICKLE_FILE):
         with open(CREDENTIALS_PICKLE_FILE, 'rb') as token:
             creds = pickle.load(token)
+        # Check if credentials are expired
+        if creds and creds.expired and creds.token_expiry < datetime.utcnow():
+            print("Credentials have expired. Deleting credentials file.")
+            os.remove(CREDENTIALS_PICKLE_FILE)
+            creds = None
     
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
